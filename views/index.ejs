@@ -8,21 +8,50 @@
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
 
-    <ul>
-    <%
-      for (let i in itemList) {
-      let itemId = i;
-      let itemName = itemList[i].name;
-      let itemPrice = itemList[i].price;
-      console.log(itemName);
-    %>
-      <li>
-        <a href="/item?itemId=<%= itemId %>">
-          <%= itemName %>
-        </a>
-      </li>
-    <% } %>
-    </ul>
+    <form action="/" method="post">
+      <input type="text" name="search">
+      <input type="submit" value="商品検索">
+    </form>
 
+    <% if (searchedItemName) { %>
+      <p>検索ワード：<%= searchedItemName %></p>
+      <p>
+        検索結果： <%= matchedItemList.length %>件
+      </p>
+      <ul>
+        <%
+          for (let i in matchedItemList) {
+            let itemId = i;
+            let itemName = matchedItemList[i].name;
+            // let itemPrice = itemList[i].price;
+            %>
+          <li>
+            <a href="/item?itemId=<%= itemId %>">
+              <%= itemName %>
+            </a>
+          </li>
+        <% } %>
+      </ul>
+    <% } %>
+
+
+    <div>
+      <h1>商品一覧</h1>
+      <ul>
+        <%
+          for (let i in itemList) {
+            let itemId = i;
+            let itemName = itemList[i].name;
+            // let itemPrice = itemList[i].price;
+            %>
+        <li>
+          <a href="/item?itemId=<%= itemId %>">
+            <%= itemName %>
+          </a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+            
   </body>
 </html>
