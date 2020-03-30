@@ -7,5 +7,22 @@
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+
+    <ul>
+    <%
+      for (let i in itemList) {
+      let itemId = i;
+      let itemName = itemList[i].name;
+      let itemPrice = itemList[i].price;
+      console.log(itemName);
+    %>
+      <li>
+        <a href="/item?itemId=<%= itemId %>">
+          <%= itemName %>
+        </a>
+      </li>
+    <% } %>
+    </ul>
+
   </body>
 </html>
