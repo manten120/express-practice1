@@ -3,9 +3,71 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+
+    <script>
+      $(function(){
+        $('#searchInput').on('input', function(event){
+          var searchWord = $('#searchInput').val();
+          $.getJSON("/ajax?searchWord=" + searchWord, function(json){
+            let result = '';
+            for (let i in json) {
+              result += `<li><a href="/item?itemId=${json[i].id}"> ${json[i].name}</a></li>`;
+            }
+            $('#searchResult').html('<ul>' + result + '</ul>');
+          });
+        });
+      });
+    </script>
   </head>
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+
+    <form action="/" method="post">
+      <input type="text" name="search">
+      <input type="submit" value="商品検索">
+    </form>
+
+    <% if (searchedItemName) { %>
+      <p>検索ワード：<%= searchedItemName %></p>
+      <p>
+        検索結果： <%= matchedItemList.length %>件
+      </p>
+      <ul>
+        <%
+          for (let i in matchedItemList) {
+            let itemId = matchedItemList[i].id;
+            let itemName = matchedItemList[i].name;
+            %>
+          <li>
+            <a href="/item?itemId=<%= itemId %>">
+              <%= itemName %>
+            </a>
+          </li>
+        <% } %>
+      </ul>
+    <% } %>
+
+    <div>
+      <h1>商品一覧</h1>
+      <ul>
+        <%
+          for (let i in itemList) {
+            let itemId = i;
+            let itemName = itemList[i].name;
+            // let itemPrice = itemList[i].price;
+            %>
+        <li>
+          <a href="/item?itemId=<%= itemId %>">
+            <%= itemName %>
+          </a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+
+    <input type="text" name="searchWord" id="searchInput" >
+    <p id="searchResult"></p>
   </body>
 </html>
