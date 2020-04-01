@@ -3,6 +3,22 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+
+    <script>
+      $(function(){
+        $('#searchInput').on('input', function(event){
+          var searchWord = $('#searchInput').val();
+          $.getJSON("/ajax?searchWord=" + searchWord, function(json){
+            let result = '';
+            for (let i in json) {
+              result += `<li><a href="/item?itemId=${json[i].id}"> ${json[i].name}</a></li>`;
+            }
+            $('#searchResult').html('<ul>' + result + '</ul>');
+          });
+        });
+      });
+    </script>
   </head>
   <body>
     <h1><%= title %></h1>
@@ -21,9 +37,8 @@
       <ul>
         <%
           for (let i in matchedItemList) {
-            let itemId = i;
+            let itemId = matchedItemList[i].id;
             let itemName = matchedItemList[i].name;
-            // let itemPrice = itemList[i].price;
             %>
           <li>
             <a href="/item?itemId=<%= itemId %>">
@@ -33,7 +48,6 @@
         <% } %>
       </ul>
     <% } %>
-
 
     <div>
       <h1>商品一覧</h1>
@@ -52,6 +66,8 @@
         <% } %>
       </ul>
     </div>
-            
+
+    <input type="text" name="searchWord" id="searchInput" >
+    <p id="searchResult"></p>
   </body>
 </html>
